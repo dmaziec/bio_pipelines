@@ -1,0 +1,31 @@
+{
+    "NGS_workspace": "/Users/dominika/projects/airflow_spark/project/tests/resources/ngs_workspace_1/",
+
+    "bio_pipe_alignment_spark_num_executors": 5,
+    "bio_pipe_alignment_spark_executor_memory": "12g",
+    "bio_pipe_alignment_spark_executor_memory": "12g",
+    "bio_pipe_alignment_spark_driver_memory": "12g",
+
+    "bio_pipe_variantcalling_spark_num_executors": 5,
+    "bio_pipe_variantcalling_spark_executor_memory": "12g",
+    "bio_pipe_variantcalling_spark_executor_memory": "12g",
+    "bio_pipe_variantcalling_spark_driver_memory": "12g",
+
+    "bio_pipe_annotation_spark_num_executors": 5,
+    "bio_pipe_annotation_spark_executor_memory": "12g",
+    "bio_pipe_annotation_spark_executor_memory": "12g",
+    "bio_pipe_annotation_spark_driver_memory": "12g",
+    "bio_pipe_vep_cache": "/Volumes/Samsung_T5/ngs/vep/98/",
+
+
+
+    "bio_pipe_cannoli": "/data/work/home/dmaziec/cannoli-assembly-spark2_2.11-0.10.0-SNAPSHOT.jar",
+    "bio_pipe_reference": "/Users/dominika/projects/airflow_spark/project/tests/resources/ngs_workspace_1/reference/reference.fa",
+    "bio_pipe_jar": "/Users/dominika/ten_assembly.jar",
+    "bio_pipe_adam_jar": "/data/work/home/dmaziec/adam-assembly/target/adam-assembly-spark2_2.11-0.33.0-SNAPSHOT.jar",
+    "bio_pipe_interleaver_adam": "/Users/dominika/projects/adam/scripts/fastq-interleaver.py",
+    "bio_pipe_spark_connection": "cdh00",
+    "bio_pipe_aligner": "bowtie2",
+    "bio_pipe_snps_file": "/path/tosps"
+}
+

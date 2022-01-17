@@ -1,0 +1,131 @@
+import glob
+from datetime import datetime
+configfile: "config.json"
+EXTENSION = ['.sa', '.pac', '.bwt', '.ann', '.amb']
+reference = config["reference"]
+reference_without_extension = reference.rsplit('.',1)[0]
+output_directory = config["output_directory"]
+input_list = []
+output_list = []
+now = datetime.now()
+time = now.strftime("%m_%d_%Y_%H_%M_%S")
+
+def find_rg(wildcards):
+    for read in config["reads"]:
+        if read["read"] == wildcards.read_name:
+            print(read["group_read"])
+            return read["group_read"]
+
+
+for read in config["reads"]: 
+    input_list.append(read["input_directory"])
+
+output_list = [str(read["read"]) for read in config["reads"]]
+rule all:
+    input:  expand("{out}/vep/{read}_vep.vcf", out = output_directory, read = output_list) 
+rule index:
+    input:
+        ref = config["reference"]
+    output:
+        ref_extension= expand("{reference}{extension}", reference=config["reference"], extension=EXTENSION),
+        ref_fai = expand("{reference}.fai", reference=config["reference"])
+    conda:
+        "env/bwa.yaml"
+    shell:
+        "samtools faidx {input.ref} && bwa index {input.ref}"
+
+rule mapping:
+    input:
+        read = config["location"] + '/{read_name}.fq',
+        ref = expand ("{reference}",reference=config["reference"]),
+        ref_extension = expand("{reference}{extension}", reference=config["reference"],extension=EXTENSION),
+    threads: config["bwa"]["threads"]
+    log: "logs/" + time + "/alignment/{read_name}.log"
+    conda:
+        "env/bwa.yaml"
+    output: expand("{out}/mapped/{{read_name}}.bam", out = output_directory)
+    params: 
+        rg = find_rg,
+        options = config["bwa"]["options"]
+    shell:
+        "bwa mem -R {params.rg} {params.options} {input.ref} {input.read} | samtools view -bS - > {output} 2> {log}"
+
+rule sort:
+    input:
+        expand("{out}/mapped/{{read_name}}.bam", out = output_directory)
+    output:
+          expand("{out}/sorted/{{read_name}}_sorted.bam", out = output_directory)
+    conda:
+        "env/gatk.yaml"
+    log: "logs/" + time + "/sort/{read_name}.log"   
+    shell:
+        "gatk SortSam --INPUT {input} --OUTPUT {output} --SORT_ORDER coordinate 2> {log}"
+rule mark_duplicates:
+    input:
+      file = expand("{out}/sorted/{{read_name}}_sorted.bam", out = output_directory)
+    log: "logs/" + time + "/mark_duplicates/{read_name}.log"  
+    output:
+        output = expand("{out}/marked_duplicates/{{read_name}}_sorted_markeddup.bam", out = output_directory),
+        text = expand("{out}/marked_duplicates/{{read_name}}_marked_duplicates.txt", out = output_directory)
+    conda:
+        "env/gatk.yaml" 
+    shell:
+        "gatk MarkDuplicates --INPUT {input.file} --OUTPUT {output.output} -M {output.text} 2> {log}"
+
+rule index_marked:
+    input:
+        expand("{out}/marked_duplicates/{{read_name}}_sorted_markeddup.bam", out = output_directory)
+    output:
+        expand("{out}/marked_duplicates/{{read_name}}_sorted_markeddup.bam.bai", out = output_directory)
+    conda:
+        "env/bwa.yaml"
+    log: "logs/" + time + "/index_marked/{read_name}.log"  
+    shell:
+        "samtools index {input} 2> {log}"
+rule generate_dictionary:
+    input: expand ("{reference}",reference=config["reference"])
+    output: expand("{reference}.dict", reference=reference_without_extension) #TODO
+    conda:
+        "env/gatk.yaml"
+    shell:
+        "gatk CreateSequenceDictionary --REFERENCE {input} "
+
+rule haplotype_caller:
+    input:
+        ref = expand ("{reference}",reference=config["reference"]),
+        indexedbam = expand("{out}/marked_duplicates/{{read_name}}_sorted_markeddup.bam", out = output_directory),
+        indexedbai = expand("{out}/marked_duplicates/{{read_name}}_sorted_markeddup.bam.bai", out = output_directory),
+        dictionary = expand("{reference}.dict", reference =  reference_without_extension)
+    threads: config["haplotype_caller"]["threads"]
+    params: 
+        options = config["bwa"]["options"]
+    output: "results/HaplotypeCaller/{read_name}_HaplotypeCaller.g.vcf"
+    conda:
+        "env/gatk.yaml"
+    shell:
+        "gatk HaplotypeCaller {params.options} --reference {input.ref} --input {input.indexedbam} --output {output}"
+rule vep:
+    input: expand("{out}/HaplotypeCaller/{{read_name}}_HaplotypeCaller.g.vcf", out = output_directory)
+    output: expand ("{out}/vep/{{read_name}}_vep.vcf", out = output_directory)
+    log: "logs/" + time + "/vep/{read_name}.log" 
+    params:
+        options = config["vep"]["options"]
+    conda:
+        "env/vep.yaml"
+    threads: config["vep"]["threads"]
+    shell:
+        "vep --dir_cache /opt/vep/.vep --pick_allele --format vcf  --no_stats --force_overwrite \
+         --everything -cache --vcf -offline -o {output} -i {input} 2> {log}"
+
+rule quality_control:
+    input:
+       file = "reads/{read_name}.fastq"
+    log: "logs/" + time + "/qc/{read_name}"  
+    output:
+          expand("{out}/quality_control/{{read_name}}_fastqc.html", out = output_directory),
+          expand("{out}/quality_control/{{read_name}}_fastqc.zip", out = output_directory)
+    conda:
+        "env/bwa.yaml"
+    shell:
+        "fastqc {input.file} 2> {log}"
+

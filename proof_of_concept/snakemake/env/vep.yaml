@@ -1,0 +1,4 @@
+channels:
+    - bioconda/label/cf201901
+dependencies:
+    - ensembl-vep = 95.0

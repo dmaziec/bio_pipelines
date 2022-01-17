@@ -1,0 +1,31 @@
+{
+    "NGS_workspace": "/Volumes/Samsung_T5/ngs/",
+
+    "bio_pipe_alignment_spark_num_executors": 5,
+    "bio_pipe_alignment_spark_executor_memory": "12g",
+    "bio_pipe_alignment_spark_executor_memory": "12g",
+    "bio_pipe_alignment_spark_driver_memory": "12g",
+
+    "bio_pipe_variantcalling_spark_num_executors": 5,
+    "bio_pipe_variantcalling_spark_executor_memory": "12g",
+    "bio_pipe_variantcalling_spark_executor_memory": "12g",
+    "bio_pipe_variantcalling_spark_driver_memory": "12g",
+    "freebayes_docker_image": null,
+
+    "bio_pipe_annotation_spark_num_executors": 5,
+    "bio_pipe_annotation_spark_executor_memory": "12g",
+    "bio_pipe_annotation_spark_executor_memory": "12g",
+    "bio_pipe_annotation_spark_driver_memory": "12g",
+    "bio_pipe_vep_cache": "/Volumes/Samsung_T5/ngs/vep/98/",
+    "vep_docker_image": "quay.io/biocontainers/ensembl-vep:98.2--pl526hecc5488_0",
+
+
+    "bio_pipe_cannoli": "/Users/dominika/projects/cannoli/assembly/target/cannoli-assembly-spark3_2.12-0.11.0-SNAPSHOT.jar",
+    "bio_pipe_reference": "/Volumes/Samsung_T5/ngs/reference/genome.fa",
+    "bio_pipe_jar": "/Users/dominika/assembly_with_bqsr.jar",
+    "bio_pipe_adam_jar": "/data/work/home/dmaziec/adam-assembly/target/adam-assembly-spark2_2.11-0.33.0-SNAPSHOT.jar",
+    "bio_pipe_spark_connection": "cdh00",
+    "bio_pipe_aligner": "bwa",
+    "bio_pipe_snps_file": "/Volumes/Samsung_T5/ngs/bqsr1.vcf"
+}
+

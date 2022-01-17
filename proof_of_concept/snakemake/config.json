@@ -1,0 +1,41 @@
+{
+   "reference": "/data/work/home/dmaziec/temp/reference/chr1.fa",
+   "reads": [
+       {
+
+         "read": "read_chr1",
+         "input_directory": "reads/read_chr1.fq",
+         "input_directory": "/data/work/home/dmaziec/temp/reads/read_chr1.fq",
+         "group_read": "'@RG\\tID:CHR1\\tSM:CHR1\\t'",
+         
+      },
+      {
+
+         "read": "read_chr2",
+         "input_directory": "/data/work/home/dmaziec/temp/reads/read_chr2.fq",
+         "group_read": "'@RG\\tID:CHR2\\tSM:CHR2\\t'"
+      }
+
+   ],
+ "output_directory": "results",
+
+
+   "location": "/data/work/home/dmaziec/temp/reads/",
+   "output_directory": "results",
+
+   "bwa": {
+      "threads": 2,
+      "options": ""
+   },
+
+   "haplotype_caller": {
+      "threads": 2,
+      "options": ""
+   },
+
+   "vep": {
+      "threads": 2,
+      "options": ""
+   }
+}
+

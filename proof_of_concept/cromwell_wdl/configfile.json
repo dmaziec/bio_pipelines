@@ -1,0 +1,18 @@
+{
+    "NGS.reference": {
+      "ref_fasta": "/Volumes/Samsung_T5/snakemake/snakemake/reference/chr1_copy.fa", 
+      "ref_fasta_index": "/Volumes/Samsung_T5/snakemake/snakemake/reference/chr1_copy.fa.fai",
+      "ref_dict": "/Volumes/Samsung_T5/snakemake/snakemake/reference/chr1_copy.dict",
+      "ref_ann": "/Volumes/Samsung_T5/snakemake/snakemake/reference/chr1_copy.fa.ann",
+      "ref_sa": "/Volumes/Samsung_T5/snakemake/snakemake/reference/chr1_copy.fa.sa",
+      "ref_amb": "/Volumes/Samsung_T5/snakemake/snakemake/reference/chr1_copy.fa.amb",
+      "ref_bwt": "/Volumes/Samsung_T5/snakemake/snakemake/reference/chr1_copy.fa.bwt",
+      "ref_pac":"/Volumes/Samsung_T5/snakemake/snakemake/reference/chr1_copy.fa.pac"
+    },
+    "NGS.reads": [  {
+            "name":  "chr1",
+            "directory": "/Volumes/Samsung_T5/snakemake/snakemake/reads/read_chr1.fq",
+            "group_read": "@RG\\tID:CHR1\\tSM:CHR1\\t"
+        }
+    ]
+}

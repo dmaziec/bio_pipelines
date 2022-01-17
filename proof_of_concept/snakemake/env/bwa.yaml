@@ -1,0 +1,7 @@
+channels:
+    - bioconda
+dependencies:
+    - bwa = 0.7.8
+    - python = 3.5
+    - samtools = 1.7 
+    - fastqc
