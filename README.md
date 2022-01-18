@@ -24,7 +24,7 @@ This change the Airflow mode to UnitTest mode.
 
 You should provide an absolute path to the Seqtender JAR file and set it as the environment variable `SEQTENDER_JAR` .
 
-Tests performed for VEP operators are perfomed using 98 version. You should provied the absolute path to the VEP cache as the the environment variable `VEP_CACHE_98`.
+Tests performed for VEP operators are perfomed using 98 version. You should provide an absolute path to the VEP cache as the the environment variable `VEP_CACHE_98`.
 
 By default tests resolves an absolute path to the Cannoli JAR file (stored in the `tools/target/scala-2.12/BioPipeline-assembly-0.2-SNAPSHOT.jar` directory), but it can be set as the environement variable`CANNOLI_JAR`. 
 
